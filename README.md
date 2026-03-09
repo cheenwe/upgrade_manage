@@ -51,6 +51,29 @@ python app.py
 - **升级历史**：查看与下载历史记录
 - **系统设置 / 用户管理**：仅管理员可见
 
+### Docker 运行
+
+需先有 `.env`（可 `cp .env.example .env` 后修改）。
+
+```bash
+# 构建并启动（挂载主机 /opt、本地 data 与 uploads）
+docker compose up -d --build
+```
+
+默认映射端口 5000；若 `.env` 中设置了 `PORT=8080`，则主机 8080 → 容器 5000。  
+**卷挂载**：
+
+- `./data` → 容器内数据库目录（持久化）
+- `./uploads` → 容器内上传缓存目录（持久化）
+- `/opt` → 主机 `/opt` 挂载到容器内 `/opt`，上传配置中的目标路径若为 `/opt/xxx` 会写入主机对应目录
+
+仅使用镜像、不 compose 时示例：
+
+```bash
+docker build -t upgrade_manage .
+docker run -d -p 5000:5000 -v $(pwd)/data:/app/data -v $(pwd)/uploads:/app/uploads -v /opt:/opt --env-file .env upgrade_manage
+```
+
 ## 环境变量（.env）
 
 | 变量 | 说明 |
