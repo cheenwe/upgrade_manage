@@ -28,14 +28,18 @@ def _resolve_upload_root():
 
 
 def _resolve_target_dir(target_path: str):
-    """将配置中的 target_path 解析为绝对目录。"""
+    """
+    将配置中的 target_path 解析为绝对目录。
+    - 若以 / 开头（绝对路径），直接使用并规范化，解压会写到该目录（Docker 挂载 /opt 时请填 /opt/xxx）。
+    - 若为相对路径，则相对于 UPLOAD_ROOT（如 uploads/）拼接。
+    """
     target = (target_path or "").strip()
     if not target:
         return None
     root = _resolve_upload_root()
     if os.path.isabs(target):
-        return target
-    return os.path.join(root, target)
+        return os.path.normpath(target)
+    return os.path.normpath(os.path.join(root, target))
 
 
 def _make_staging_dir():

@@ -3,7 +3,11 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# 安装依赖
+# 安装系统依赖（上传配置中 unzip 解压需要）
+RUN apt-get update && apt-get install -y --no-install-recommends unzip nano \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装 Python 依赖
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
