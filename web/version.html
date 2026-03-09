@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="iStar is a demo made by 10sh.cn ">
+    <meta name="keywords" content="10sh.cn,iStar">
+    <meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+    <title>升级管理平台-cheenwe</title>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <link href="./css/main.css" rel="stylesheet" />
+    <link href="./css/main-vendors.css" rel="stylesheet" />
+    <link href="./css/filepond.min.css" rel="stylesheet" />
+    <link href="./css/demo.css" rel="stylesheet" />
+
+    <script src="./js/jquery.slim.min.js"></script>
+
+    <script src="./js/application-default.js" data-turbolinks-track="reload"></script>
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/auth-role.js"></script>
+    <style>
+        .navbar .nav-link.rounded-pill:hover { background: rgba(0,0,0,.06); }
+        .navbar .nav-item.active .nav-link.rounded-pill { background: var(--tblr-primary); color: #fff !important; }
+        /* 上传配置响应式：小屏单列、中屏两列、大屏三列，防止溢出 */
+        #uploadConfigRadios.row { display: flex; flex-wrap: wrap; margin-right: -0.5rem; margin-left: -0.5rem; }
+        #uploadConfigRadios.row > [class*="col-"] { padding-right: 0.5rem; padding-left: 0.5rem; margin-bottom: 0.75rem; }
+        #uploadConfigRadios .form-selectgroup-item { min-width: 0; }
+        #uploadConfigRadios .form-selectgroup-label { min-width: 0; overflow: hidden; }
+    </style>
+</head>
+<body class="antialiased" onload="CheckLogin(); ApplyNavRole();">
+    <div class="page">
+        <header class="navbar navbar-expand-md navbar-light d-print-none border-bottom shadow-sm bg-white">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="切换导航">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="." class="d-flex align-items-center">
+                        <img src="./logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./index.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg></span>
+                                <span class="nav-link-title">主页</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./versions.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"/><line x1="12" y1="12" x2="20" y2="7.5"/><line x1="12" y1="12" x2="12" y2="21"/><line x1="12" y1="12" x2="4" y2="7.5"/><line x1="16" y1="5.25" x2="8" y2="9.75"/></svg></span>
+                                <span class="nav-link-title">版本管理</span>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./version.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="9 11 12 14 20 6"/><path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9"/></svg></span>
+                                <span class="nav-link-title">上传新版本</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./history.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect width="6" height="6" x="9" y="5" rx="1"/><line x1="4" y1="7" x2="5" y2="7"/><line x1="4" y1="11" x2="5" y2="11"/><line x1="19" y1="7" x2="20" y2="7"/><line x1="19" y1="11" x2="20" y2="11"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="4" y1="19" x2="20" y2="19"/></svg></span>
+                                <span class="nav-link-title">升级历史</span>
+                            </a>
+                        </li>
+                        <li class="nav-item nav-admin">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./settings.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                                <span class="nav-link-title">系统设置</span>
+                            </a>
+                        </li>
+                        <li class="nav-item nav-admin">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./users.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 11l2 2l4 -4"/></svg></span>
+                                <span class="nav-link-title">用户管理</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./docs.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><line x1="9" y1="9" x2="10" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></span>
+                                <span class="nav-link-title">文档</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item align-self-center">
+                            <span class="navbar-text text-secondary px-2" id="nav-username"></span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 text-danger" href="#" onclick="ClickLogout(); return false;">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/><path d="M7 12h14l-3 -3m0 6l3 -3"/></svg></span>
+                                <span class="nav-link-title">退出系统</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="content">
+            <div class="container-xl">
+                <!-- Page title -->
+                <div class="page-header d-print-none">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h2 class="page-title">
+                                Upload Version
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info" role="alert"><strong>说明!</strong> 选择上传配置后上传文件，版本号将按该配置自动生成自增序号。
+                </div>
+                <div class="row row-cards">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">上传新版本</h3>
+                            </div>
+                            <div class="card-body">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label required">上传配置</label>
+                                        <div id="uploadConfigRadios" class="row row-cards row-cols-2 row-cols-md-4 row-cols-lg-6 g-2 g-md-3 form-selectgroup form-selectgroup-boxes"></div>
+                                        <small class="form-hint">在「系统设置」中管理配置；版本号按所选配置自动自增。</small>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label required">选择文件</label>
+                                        <input type="file" class="filepond" name="file" id="file"
+                                            data-allow-reorder="true" data-max-file-size="3MB" data-max-files="3">
+                                        <small class="form-hint">拖放或点击选择文件，上传后自动生成版本号。</small>
+                                        <div id="result" class="mt-2"></div>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <div class="btn-list justify-content-end">
+                                            <a href="./versions.html" class="btn btn-secondary">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="15 6 9 12 15 18"></polyline></svg> 返回版本列表
+                                            </a>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="./docs.html" class="link-secondary">Documentation</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright © 2026
+                                    <a href="https://github.com/cheenwe" class="link-secondary">cheenwe</a>. All rights reserved.
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="link-secondary" rel="noopener">v1.0.0</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <!-- Libs JS -->
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <!-- iStar Core -->
+    <script src="./js/main.min.js"></script>
+    <script src="./js/parsley.min.js"></script>
+    <script src="./js/zh_cn.js"></script>
+    <script src="./js/axios.min.js"></script>
+
+    <script src="./js/filepond.min.js"></script>
+    <script src="./js/notify.js"></script>
+
+
+    <script type="text/javascript">
+        //  刷新当前页面
+        function reloadPage() {
+            window.location.reload()
+        }
+
+        //  后退
+        function goBack() {
+            window.history.back()
+        }
+
+        //  前进
+        function goForward() {
+            window.history.forward()
+        }
+
+        // $(function() { 
+        //     window.prettyPrint && prettyPrint();
+        // 		$('.datepicker').datepicker({
+        // 			date: '<%=( Date.today+1.year).strftime("%Y-%m-%d")%>',
+        //       format: 'yyyy-mm-dd',
+        //       autoHide: true,
+        //       zIndex: 2048,
+        //       weekStart: 1,
+        //       startView: 0, // 1,2
+        //       language: 'zh-CN'
+        // 		});
+        // });
+
+        $(document).on('turbolinks:load', function() {
+        if ($('form').length == 2 || $('form').length == 1) {
+                $('form').parsley().on('field:validated', function() {
+                    var ok;
+                    ok = $('.parsley-error').length === 0;
+                    $('.bs-callout-info').toggleClass('hidden', !ok);
+                    $('.bs-callout-warning').toggleClass('hidden', ok);
+                    console.log(">>noooooo>>>>>");
+                }).on('form:submit', function() {
+                    return console.log(">>>>>>>");
+                    return false; // Don't submit form for this demo
+                });
+            };
+
+            $.notify.defaults({
+                autoHide: false
+            });
+            // 避免 Turbolinks 来回切换时重复创建 FilePond
+            var inputElement = document.querySelector('input[type="file"].filepond');
+            if (!inputElement) return;
+            if (window.pond) {
+                try { window.pond.destroy(); } catch (e) {}
+                window.pond = null;
+            }
+
+            // Create the FilePond instance
+            var pond = FilePond.create(inputElement, {
+                allowMultiple: false,
+                allowReorder: true
+            });
+
+            // function CheckFile() {
+            //     legend_name = document.getElementsByTagName("legend")[0]
+            //     console.log(legend_name)
+            // }
+
+            FilePond.setOptions({
+                allowMultiple: false,
+                allowReorder: true,
+                server: {
+                    process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
+                        var name = file.name.toLowerCase();
+                        var radio = document.querySelector('input[name="uploadConfigId"]:checked');
+                        var configId = radio ? radio.value : "";
+                        if (!configId) {
+                            $.notify("请先选择上传配置", "error");
+                            error("请选择上传配置");
+                            return { abort: function() {} };
+                        }
+                        var allowed = name.endsWith(".jar") || name.endsWith(".zip") || name.endsWith(".tar") || name.endsWith(".tar.gz") || name.endsWith(".tgz");
+                        if (!allowed) {
+                            $.notify("请上传 .jar / .zip / .tar / .tar.gz 文件", "error");
+                            error("不支持的文件类型");
+                            return { abort: function() {} };
+                        }
+                        const formData = new FormData();
+                        formData.append(fieldName, file, file.name);
+                        var token = localStorage.getItem("token");
+                        if (token) formData.append("token", token);
+                        formData.append("config_id", configId);
+
+                        const request = new XMLHttpRequest();
+                        request.open('POST', '/api/uploads');
+                        if (token) request.setRequestHeader('Authorization', 'Bearer ' + token);
+                        request.upload.onprogress = (e) => { progress(e.lengthComputable, e.loaded, e.total); };
+                        request.onload = function() {
+                            if (request.status >= 200 && request.status < 300) {
+                                var result = JSON.parse(request.responseText);
+                                var versionStr = result.version || result.version_seq;
+                                var msg = result.msg || "上传成功";
+                                if (versionStr) msg = "上传成功，版本号：" + versionStr;
+                                $.notify(msg, "success");
+                                var fileName = (file && file.name || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+                                var resultEl = document.getElementById("result");
+                                if (resultEl) {
+                                    resultEl.innerHTML = "<span class=\"text-success\">已成功上传包名： " + fileName + "</span><br><span class=\"text-success\">版本号：" + (versionStr || "") + "</span>";
+                                }
+                                load(request.responseText);
+                                if (pond) pond.removeFiles();
+                            } else {
+                                var err = "上传失败";
+                                try { var r = JSON.parse(request.responseText); if (r.msg) err = r.msg; } catch(e) {}
+                                $.notify(err, "error");
+                                error(err);
+                            }
+                        };
+                        request.onerror = function() { $.notify("网络错误", "error"); error("网络错误"); };
+                        request.send(formData);
+                        return { abort: function() { request.abort(); } };
+                    },
+                }
+            });
+            window.pond = pond;
+
+            // 加载上传配置为单选，默认选中第一个；若 URL 带 config_id 则预选对应配置
+            // 先清空容器，避免 Turbolinks 不刷新时重复追加选项
+            var urlParams = new URLSearchParams(window.location.search);
+            var presetConfigId = urlParams.get("config_id");
+            if (presetConfigId) try { presetConfigId = parseInt(presetConfigId, 10); } catch (e) { presetConfigId = null; }
+            var token = localStorage.getItem("token");
+            var box = document.getElementById("uploadConfigRadios");
+            if (box) box.innerHTML = "";
+            if (token && box) {
+                axios.get("/api/upload-configs", { headers: { "Authorization": "Bearer " + token } }).then(function(r) {
+                    if (!box || !r.data.success || !r.data.data) return;
+                    box.innerHTML = "";
+                    var list = r.data.data;
+                    var hasPreset = presetConfigId != null && list.some(function(x) { return Number(x.id) === presetConfigId; });
+                    var actionText = { copy: "仅复制", unzip: "unzip 解压", tar: "tar 解压" };
+                    list.forEach(function(c, i) {
+                        var col = document.createElement("div");
+                        col.className = "col";
+                        var label = document.createElement("label");
+                        label.className = "form-selectgroup-item w-100";
+                        var inp = document.createElement("input");
+                        inp.type = "radio";
+                        inp.name = "uploadConfigId";
+                        inp.value = c.id;
+                        inp.className = "form-selectgroup-input";
+                        if (hasPreset && Number(c.id) === presetConfigId) inp.checked = true;
+                        else if (!hasPreset && i === 0) inp.checked = true;
+                        var span = document.createElement("span");
+                        span.className = "form-selectgroup-label d-flex flex-column align-items-start p-2 text-start w-100";
+                        span.innerHTML = "<strong class=\"small\">" + (c.name || "") + "</strong><span class=\"text-muted small d-block text-truncate\" style=\"min-width:0\">" + (c.target_path || "") + " · " + (actionText[c.action] || c.action) + "</span>";
+                        label.appendChild(inp);
+                        label.appendChild(span);
+                        col.appendChild(label);
+                        box.appendChild(col);
+                    });
+                    if (list.length === 0) box.innerHTML = "<p class=\"text-muted\">请先在「系统设置」中添加上传配置。</p>";
+                }).catch(function() {});
+            }
+        });
+    </script>
+</body>
+</html>

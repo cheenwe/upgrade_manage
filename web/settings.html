@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>应用升级系统 - 系统设置</title>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <link href="./css/main.css" rel="stylesheet" />
+    <link href="./css/main-vendors.css" rel="stylesheet" />
+    <link href="./css/demo.css" rel="stylesheet" />
+    <script src="./js/jquery.slim.min.js"></script>
+    <script src="./js/application-default.js"></script>
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/auth-role.js"></script>
+    <style>
+        .navbar .nav-link.rounded-pill:hover { background: rgba(0,0,0,.06); }
+        .navbar .nav-item.active .nav-link.rounded-pill { background: var(--tblr-primary); color: #fff !important; }
+    </style>
+</head>
+<body class="antialiased" onload="CheckLogin(); ApplyNavRole();">
+    <div class="page">
+        <header class="navbar navbar-expand-md navbar-light d-print-none border-bottom shadow-sm bg-white">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="切换导航">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="." class="d-flex align-items-center">
+                        <img src="./logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./index.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg></span>
+                                <span class="nav-link-title">主页</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./versions.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"/><line x1="12" y1="12" x2="20" y2="7.5"/><line x1="12" y1="12" x2="12" y2="21"/><line x1="12" y1="12" x2="4" y2="7.5"/><line x1="16" y1="5.25" x2="8" y2="9.75"/></svg></span>
+                                <span class="nav-link-title">版本管理</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./version.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="9 11 12 14 20 6"/><path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9"/></svg></span>
+                                <span class="nav-link-title">上传新版本</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./history.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect width="6" height="6" x="9" y="5" rx="1"/><line x1="4" y1="7" x2="5" y2="7"/><line x1="4" y1="11" x2="5" y2="11"/><line x1="19" y1="7" x2="20" y2="7"/><line x1="19" y1="11" x2="20" y2="11"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="4" y1="19" x2="20" y2="19"/></svg></span>
+                                <span class="nav-link-title">升级历史</span>
+                            </a>
+                        </li>
+                        <li class="nav-item active nav-admin">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./settings.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                                <span class="nav-link-title">系统设置</span>
+                            </a>
+                        </li>
+                        <li class="nav-item nav-admin">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./users.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 11l2 2l4 -4"/></svg></span>
+                                <span class="nav-link-title">用户管理</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./docs.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><line x1="9" y1="9" x2="10" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></span>
+                                <span class="nav-link-title">文档</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item align-self-center">
+                            <span class="navbar-text text-secondary px-2" id="nav-username"></span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 text-danger" href="#" onclick="ClickLogout(); return false;">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/><path d="M7 12h14l-3 -3m0 6l3 -3"/></svg></span>
+                                <span class="nav-link-title">退出系统</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="content">
+            <div class="container-xl">
+                <div class="page-header d-print-none">
+                    <div class="row align-items-center">
+                        <div class="col"><h2 class="page-title">系统设置</h2></div>
+                    </div>
+                </div>
+
+                <div class="row row-cards">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h3 class="card-title">上传配置</h3>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="showConfigForm()">新增配置</button>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-secondary">上传时选择一条配置，按「上传路径」与「上传后操作」执行。操作：仅复制 / unzip 解压 / tar 解压。</p>
+                                <div class="table-responsive">
+                                    <table class="table table-vcenter table-hover">
+                                        <thead><tr><th>配置名</th><th>上传路径</th><th>上传后操作</th><th>当前版本号</th><th>说明</th><th width="120">操作</th></tr></thead>
+                                        <tbody id="uploadConfigList"></tbody>
+                                    </table>
+                                </div>
+                                <div id="configFormBox" class="mt-3 border rounded p-3 bg-light" style="display:none;">
+                                    <h4 class="mb-3" id="configFormTitle">新增配置</h4>
+                                    <div class="row mb-2">
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">配置名</label>
+                                            <input type="text" class="form-control" id="cfg_name" placeholder="如: JAR 文件">
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">上传路径</label>
+                                            <input type="text" class="form-control" id="cfg_target_path" placeholder="相对根目录如 jar、dist 或绝对路径">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">上传后操作</label>
+                                            <select class="form-select" id="cfg_action">
+                                                <option value="copy">仅复制</option>
+                                                <option value="unzip">unzip 解压</option>
+                                                <option value="tar">tar 解压</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label">当前版本号</label>
+                                            <input type="text" class="form-control" id="cfg_current_version" placeholder="如 V1.0，上传后自动变为 V1.1">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-12">
+                                            <label class="form-label">说明</label>
+                                            <input type="text" class="form-control" id="cfg_description" placeholder="可选">
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary me-2" onclick="saveConfig()">保存</button>
+                                    <button type="button" class="btn btn-secondary" onclick="hideConfigForm()">取消</button>
+                                    <input type="hidden" id="cfg_id" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header"><h3 class="card-title">自动清理</h3></div>
+                            <div class="card-body">
+                                <p class="text-secondary">清理超过指定月数的上传历史及对应文件（仅删除历史记录与 .jar 文件，dist 解压目录不删）。</p>
+                                <div class="mb-3">
+                                    <label class="form-label">保留最近（月）</label>
+                                    <input type="number" class="form-control" id="keep_months" min="1" max="24" value="3" style="max-width:120px">
+                                </div>
+                                <button type="button" class="btn btn-primary me-2" onclick="saveCleanup()">保存配置</button>
+                                <button type="button" class="btn btn-warning" onclick="runCleanup()">立即执行清理</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/notify.js"></script>
+    <script>
+        function authHeaders() {
+            var t = localStorage.getItem("token");
+            return t ? { "Authorization": "Bearer " + t } : {};
+        }
+        function loadUploadConfigs() {
+            axios.get("/api/upload-configs", { headers: authHeaders() }).then(function(r) {
+                var list = (r.data.data || []);
+                var actionText = { copy: "仅复制", unzip: "unzip 解压", tar: "tar 解压" };
+                var html = list.length ? list.map(function(p) {
+                    return "<tr><td>" + (p.name || "") + "</td><td><code>" + (p.target_path || "") + "</code></td><td>" + (actionText[p.action] || p.action) + "</td><td><strong>" + (p.current_version || "V1.0") + "</strong></td><td>" + (p.description || "-") + "</td><td><button class=\"btn btn-sm btn-outline-primary me-1\" onclick=\"editConfig(" + p.id + ")\">编辑</button><button class=\"btn btn-sm btn-outline-danger\" onclick=\"delConfig(" + p.id + ", '" + (p.name || "").replace(/'/g, "\\'") + "')\">删除</button></td></tr>";
+                }).join("") : "<tr><td colspan=\"6\" class=\"text-muted\">暂无配置，请点击「新增配置」</td></tr>";
+                document.getElementById("uploadConfigList").innerHTML = html;
+            }).catch(function(e) {
+                if (e.response && e.response.status === 403) { $.notify("仅管理员可访问", "error"); window.location.href = "./index.html"; }
+            });
+        }
+        function showConfigForm() {
+            document.getElementById("cfg_id").value = "";
+            document.getElementById("cfg_name").value = "";
+            document.getElementById("cfg_target_path").value = "";
+            document.getElementById("cfg_action").value = "copy";
+            document.getElementById("cfg_current_version").value = "V1.0";
+            document.getElementById("cfg_description").value = "";
+            document.getElementById("configFormTitle").textContent = "新增配置";
+            document.getElementById("configFormBox").style.display = "block";
+        }
+        function hideConfigForm() {
+            document.getElementById("configFormBox").style.display = "none";
+        }
+        function editConfig(id) {
+            axios.get("/api/upload-configs", { headers: authHeaders() }).then(function(r) {
+                var p = (r.data.data || []).find(function(x) { return x.id === id; });
+                if (!p) return;
+                document.getElementById("cfg_id").value = p.id;
+                document.getElementById("cfg_name").value = p.name || "";
+                document.getElementById("cfg_target_path").value = p.target_path || "";
+                document.getElementById("cfg_action").value = p.action || "copy";
+                document.getElementById("cfg_current_version").value = p.current_version || "V1.0";
+                document.getElementById("cfg_description").value = p.description || "";
+                document.getElementById("configFormTitle").textContent = "编辑配置";
+                document.getElementById("configFormBox").style.display = "block";
+            });
+        }
+        function saveConfig() {
+            var id = document.getElementById("cfg_id").value;
+            var name = document.getElementById("cfg_name").value.trim();
+            var target_path = document.getElementById("cfg_target_path").value.trim();
+            var action = document.getElementById("cfg_action").value;
+            var current_version = document.getElementById("cfg_current_version").value.trim();
+            var description = document.getElementById("cfg_description").value.trim();
+            if (!name || !target_path) { $.notify("请填写配置名和上传路径", "error"); return; }
+            var payload = { name: name, target_path: target_path, action: action, description: description };
+            if (current_version) payload.current_version = current_version;
+            var req = id
+                ? axios.put("/api/upload-configs/" + id, payload, { headers: authHeaders() })
+                : axios.post("/api/upload-configs", payload, { headers: authHeaders() });
+            req.then(function() { $.notify("保存成功", "success"); hideConfigForm(); loadUploadConfigs(); })
+                .catch(function(e) { $.notify(e.response && e.response.data && e.response.data.msg ? e.response.data.msg : "保存失败", "error"); });
+        }
+        function delConfig(id, name) {
+            if (!confirm("确定删除配置「" + name + "」吗？")) return;
+            axios.delete("/api/upload-configs/" + id, { headers: authHeaders() })
+                .then(function() { $.notify("已删除", "success"); loadUploadConfigs(); })
+                .catch(function(e) { $.notify(e.response && e.response.data && e.response.data.msg ? e.response.data.msg : "删除失败", "error"); });
+        }
+        function loadCleanup() {
+            axios.get("/api/config/cleanup", { headers: authHeaders() }).then(function(r) {
+                if (r.data.success && r.data.data && r.data.data.keep_months)
+                    document.getElementById("keep_months").value = r.data.data.keep_months;
+            }).catch(function() {});
+        }
+        function saveCleanup() {
+            var m = parseInt(document.getElementById("keep_months").value, 10) || 3;
+            axios.post("/api/config/cleanup", { keep_months: m }, { headers: authHeaders() })
+                .then(function(r) { $.notify(r.data.msg || "保存成功", "success"); })
+                .catch(function(e) { $.notify("保存失败", "error"); });
+        }
+        function runCleanup() {
+            if (!confirm("确定要立即清理超过保留月数的历史记录吗？")) return;
+            axios.post("/api/cleanup/run", {}, { headers: authHeaders() })
+                .then(function(r) { $.notify(r.data.msg || "清理完成", "success"); })
+                .catch(function(e) { $.notify("执行失败", "error"); });
+        }
+        function ClickLogout() {
+            localStorage.setItem("token", "");
+            localStorage.removeItem("username");
+            localStorage.removeItem("is_admin");
+            window.location.href = "./login.html";
+        }
+        $(function() { loadUploadConfigs(); loadCleanup(); });
+    </script>
+</body>
+</html>

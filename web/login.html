@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="iStar is a demo made by 10sh.cn ">
+    <meta name="keywords" content="10sh.cn,iStar">
+    <meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+    <title>升级管理平台-cheenwe</title>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <link href="./css/main.css" rel="stylesheet" />
+    <link href="./css/main-vendors.css" rel="stylesheet" />
+    <link href="./css/demo.css" rel="stylesheet" />
+    <script src="./js/jquery.slim.min.js"></script>
+
+
+</head>
+
+<body class="antialiased">
+    <div class="page">
+        <div class="flex-fill d-flex flex-column justify-content-center py-4">
+            <div class="container-tight py-6">
+                <div class="text-center mb-4">
+                    <a href="."><img src="./logo.svg" height="38" alt=""></a>
+                </div>
+                <div class="card card-md form">
+                    <div class="card-body">
+                        <form id="loginForm" action="javascript:void(0);">
+                        <h2 class="card-title text-center mb-4">Login to your account</h2>
+
+                        <div class="alert alert-danger alert-dismissible">
+                            <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>继续操作前请先登录系统.</div>
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input class="form-control" name="user[username]" autocomplete="on" aria-describedby="usernameHelp" id="username" placeholder="请输入用户名" required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">
+                                Password
+                            </label>
+                            <input type="password" class="form-control" name="user[password]" id="password" autocomplete="off" placeholder="请输入密码" required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-check">
+                                <input type="checkbox" id="checkbox" name="user[remember_me]" class="form-check-input"
+                                    data-parsley-multiple="userremember_me">
+                                <span class="form-check-label">Remember me on this device</span>
+                            </label>
+                        </div>
+
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-primary w-100">Sign in</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/parsley.min.js"></script>
+    <script src="./js/zh_cn.js"></script>
+    <!-- Libs JS -->
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <!-- iStar Core -->
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/main.min.js"></script>
+    <script src="./js/parsley.min.js"></script>
+    <script src="./js/zh_cn.js"></script>
+    <script src="./js/notify.js"></script>
+
+
+    <script type="text/javascript">
+        //  刷新当前页面
+        function reloadPage() {
+            window.location.reload()
+        }
+
+        //  后退
+        function goBack() {
+            window.history.back()
+        }
+
+        //  前进
+        function goForward() {
+            window.history.forward()
+        }
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            SubmitLogin();
+        });
+
+        if ($('.form').length == 2 || $('.form').length == 1) {
+            $('.form').parsley().on('field:validated', function() {
+                var ok;
+                ok = $('.parsley-error').length === 0;
+                $('.bs-callout-info').toggleClass('hidden', !ok);
+                $('.bs-callout-warning').toggleClass('hidden', ok);
+            }).on('form:submit', function() {
+                return false;
+            });
+        };
+
+        function SubmitLogin() {
+            let username = document.getElementById("username").value
+            let password = document.getElementById("password").value
+            console.info("----- username------")
+            console.info(!username)
+            console.info(username.length < 3)
+            console.info(password)
+
+            var is_validate = true
+            if (!username || username.length < 3) {
+                $.notify("请检查用户名输入，用户名至少３位!", "error");
+                is_validate = false
+            }
+            if (!password || password.length < 5) {
+                $.notify("请检查密码输入，密码至少5位!", "error");
+                is_validate = false
+            }
+            //校验通过
+            if (is_validate == true) {
+                axios.post('/api/login', {
+                        username: username,
+                        password: password
+                    })
+                    .then(function(response) {
+                        console.log(response.data);
+                        success = response.data.success
+                        token = response.data.token
+                        console.info(token)
+                        console.info(token)
+                        msg = response.data.msg
+                        if (success == 1) {
+                            $.notify(msg, "success");
+                            localStorage.setItem("token", token);
+                            var isAdmin = response.data.is_admin === true;
+                            localStorage.setItem("is_admin", isAdmin ? "1" : "0");
+                            if (username) localStorage.setItem("username", username);
+                            window.location.href = "./index.html"
+                        } else {
+                            $.notify(msg, "error");
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+            }
+        }
+    </script>
+</body>
+
+</html>

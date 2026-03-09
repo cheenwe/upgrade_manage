@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="iStar is a demo made by 10sh.cn ">
+    <meta name="keywords" content="10sh.cn,iStar">
+    <meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+    <title>升级管理平台-cheenwe测试页面</title>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <link href="./css/main.css" rel="stylesheet" />
+    <link href="./css/main-vendors.css" rel="stylesheet" />
+    <link href="./css/demo.css" rel="stylesheet" />
+    <script src="./js/jquery.slim.min.js"></script>
+    <script src="./js/application-default.js" data-turbolinks-track="reload"></script>
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/auth-role.js"></script>
+    <style>
+        .navbar .nav-link.rounded-pill:hover { background: rgba(0,0,0,.06); }
+        .navbar .nav-item.active .nav-link.rounded-pill { background: var(--tblr-primary); color: #fff !important; }
+    </style>
+</head>
+
+<body class="antialiased" onload="CheckLogin(); ApplyNavRole();">
+    <div class="page">
+        <header class="navbar navbar-expand-md navbar-light d-print-none border-bottom shadow-sm bg-white">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="切换导航">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="." class="d-flex align-items-center">
+                        <img src="./logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item active">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./index.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg></span>
+                                <span class="nav-link-title">主页</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./versions.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"/><line x1="12" y1="12" x2="20" y2="7.5"/><line x1="12" y1="12" x2="12" y2="21"/><line x1="12" y1="12" x2="4" y2="7.5"/><line x1="16" y1="5.25" x2="8" y2="9.75"/></svg></span>
+                                <span class="nav-link-title">版本管理</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./version.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="9 11 12 14 20 6"/><path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9"/></svg></span>
+                                <span class="nav-link-title">上传新版本</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./history.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect width="6" height="6" x="9" y="5" rx="1"/><line x1="4" y1="7" x2="5" y2="7"/><line x1="4" y1="11" x2="5" y2="11"/><line x1="19" y1="7" x2="20" y2="7"/><line x1="19" y1="11" x2="20" y2="11"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="4" y1="19" x2="20" y2="19"/></svg></span>
+                                <span class="nav-link-title">升级历史</span>
+                            </a>
+                        </li>
+                        <li class="nav-item nav-admin">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./settings.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                                <span class="nav-link-title">系统设置</span>
+                            </a>
+                        </li>
+                        <li class="nav-item nav-admin">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./users.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 11l2 2l4 -4"/></svg></span>
+                                <span class="nav-link-title">用户管理</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./docs.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><line x1="9" y1="9" x2="10" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></span>
+                                <span class="nav-link-title">文档</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item align-self-center">
+                            <span class="navbar-text text-secondary px-2" id="nav-username"></span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 text-danger" href="#" onclick="ClickLogout(); return false;">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/><path d="M7 12h14l-3 -3m0 6l3 -3"/></svg></span>
+                                <span class="nav-link-title">退出系统</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="content">
+            <div class="container-xl">
+                <div class="card">
+
+                    <div class="card-header">
+                        <h3 class="card-title">测试请求接口版本</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info mb-3">
+                            接口请求地址： GET <a href="/api/v1/version" target="_blank">/api/v1/version</a>
+                        </div>
+
+                        <form class="mb-4">
+                            <div class="mb-3">
+                                <label class="form-label">app</label>
+                                <input type="text" name="app" id="app" class="form-control" autocomplete="off" placeholder="请输入应用名" value="wechat">
+                                <div class="form-hint">必填： 应用名， 当前需要升级的程序名称</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">version</label>
+                                <input type="text" name="version" id="version" class="form-control" placeholder="请输入设备当前版本号" autocomplete="off" value="1.1">
+                                <div class="form-hint">必填： 设备当前版本号</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">sn</label>
+                                <input type="text" name="sn" id="sn" class="form-control" placeholder="请输入设备SN " autocomplete="off" value="66253554">
+                                <div class="form-hint">必填： 设备唯一标识符SN </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">uuid</label>
+                                <input type="text" name="uuid" id="uuid" class="form-control" placeholder="请输入设备uuid " autocomplete="off">
+                                <div class="form-hint">选填： 设备唯一标识符uuid </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">remark</label>
+                                <input type="text" name="remark" id="remark" class="form-control" placeholder="请输入设备remark " autocomplete="off">
+                                <div class="form-hint">预留字段： 备注 </div>
+                            </div>
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-primary" onclick="SubmitTest()">立即请求</button>
+                            </div>
+                        </form>
+
+                        <div class="fw-bold mb-2">返回数据：</div>
+                        <hr>
+                        <fieldset>
+                            <br>
+                            <div id="result"></div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="./docs.html" class="link-secondary">Documentation</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright © 2026
+                                    <a href="https://github.com/cheenwe" class="link-secondary">cheenwe</a>. All rights reserved.
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="link-secondary" rel="noopener">v1.0.0</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <!-- Libs JS -->
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <!-- iStar Core -->
+    <script src="./js/main.min.js"></script>
+
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/notify.js"></script>
+
+    <script type="text/javascript">
+        var result_div = document.getElementById("result");
+
+        var newp = document.createElement("p");
+        //  刷新当前页面
+        function reloadPage() {
+            window.location.reload()
+        }
+
+        //  后退
+        function goBack() {
+            window.history.back()
+        }
+
+        //  前进
+        function goForward() {
+            window.history.forward()
+        }
+
+        function select_all() {
+            elems = $(".formcheck [name='bulk_ids[]']");
+            // console.log(elems)
+            // console.log(elems)
+            // console.log(elems)
+            if ($('#selected_all').is(':checked')) {
+                $(elems).prop('checked', true);
+            } else {
+                $(elems).prop('checked', false);
+            }
+        }
+
+        function SubmitTest() {
+            app = document.getElementById("app").value
+            version = document.getElementById("version").value
+            sn = document.getElementById("sn").value
+            uuid = document.getElementById("uuid").value
+            remark = document.getElementById("remark").value
+            data = {
+                "app": app,
+                "version": version,
+                "sn": sn,
+                "uuid": uuid,
+                "remark": remark,
+            }
+
+            console.log(data);
+            // 发送 POST 请求
+            axios({
+                    method: 'post',
+                    url: '/api/v1/version',
+                    data: data
+                }).then(function(response) {
+                    console.log(response.data);
+                    $.notify("提交数据成功!", "success");
+                    res = response.data
+                    new_link = "<div class='mb-2'><span class='text-muted'>code:</span> " + res.code + "</div><div class='mb-2'><span class='text-muted'>success:</span> " + res.success + "</div><div class='mb-2'><span class='text-muted'>md5:</span> " + res.md5 + "</div><div class='mb-2'><span class='text-muted'>is_upgrade:</span> " + res.is_upgrade + "</div><div class='mb-2'><span class='text-muted'>upgrade_url:</span> " + res.upgrade_url + "</div><div class='mb-2'><span class='text-muted'>msg:</span> " + res.msg + "</div>"
+                    newp.innerHTML = new_link;
+                    result_div.appendChild(newp);
+
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="iStar is a demo made by 10sh.cn ">
+    <meta name="keywords" content="10sh.cn,iStar">
+    <meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+    <title>升级管理平台-cheenwe</title>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <link href="./css/main.css" rel="stylesheet" />
+    <link href="./css/main-vendors.css" rel="stylesheet" />
+    <link href="./css/demo.css" rel="stylesheet" />
+    <script src="./js/jquery.slim.min.js"></script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/auth-role.js"></script>
+    <style>
+        .navbar .nav-link.rounded-pill:hover { background: rgba(0,0,0,.06); }
+        .navbar .nav-item.active .nav-link.rounded-pill { background: var(--tblr-primary); color: #fff !important; }
+    </style>
+</head>
+<body class="antialiased" onload="CheckLogin(); ApplyNavRole();">
+    <div class="page">
+        <header class="navbar navbar-expand-md navbar-light d-print-none border-bottom shadow-sm bg-white">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="切换导航">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="." class="d-flex align-items-center">
+                        <img src="./logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item active">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./index.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg></span>
+                                <span class="nav-link-title">主页</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./versions.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"/><line x1="12" y1="12" x2="20" y2="7.5"/><line x1="12" y1="12" x2="12" y2="21"/><line x1="12" y1="12" x2="4" y2="7.5"/><line x1="16" y1="5.25" x2="8" y2="9.75"/></svg></span>
+                                <span class="nav-link-title">版本管理</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./version.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="9 11 12 14 20 6"/><path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9"/></svg></span>
+                                <span class="nav-link-title">上传新版本</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./history.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect width="6" height="6" x="9" y="5" rx="1"/><line x1="4" y1="7" x2="5" y2="7"/><line x1="4" y1="11" x2="5" y2="11"/><line x1="19" y1="7" x2="20" y2="7"/><line x1="19" y1="11" x2="20" y2="11"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="4" y1="19" x2="20" y2="19"/></svg></span>
+                                <span class="nav-link-title">升级历史</span>
+                            </a>
+                        </li>
+                        <li class="nav-item nav-admin">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./settings.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                                <span class="nav-link-title">系统设置</span>
+                            </a>
+                        </li>
+                        <li class="nav-item nav-admin">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./users.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 11l2 2l4 -4"/></svg></span>
+                                <span class="nav-link-title">用户管理</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 mx-1" href="./docs.html">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><line x1="9" y1="9" x2="10" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></span>
+                                <span class="nav-link-title">文档</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item align-self-center">
+                            <span class="navbar-text text-secondary px-2" id="nav-username"></span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 text-danger" href="#" onclick="ClickLogout(); return false;">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"/><path d="M7 12h14l-3 -3m0 6l3 -3"/></svg></span>
+                                <span class="nav-link-title">退出系统</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="content">
+            <div class="container-xl">
+                <div class="page-header d-print-none mb-4">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h2 class="page-title mb-1">首页</h2>
+                            <p class="text-muted mb-0">升级管理平台 · 快速上传与各配置版本一览</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快捷导航 -->
+                <div class="row row-cards mb-4">
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <a href="./versions.html" class="card card-link card-link-pop text-decoration-none h-100">
+                            <div class="card-status-start bg-primary"></div>
+                            <div class="card-body">
+                                <h3 class="card-title text-body">版本管理</h3>
+                                <p class="text-muted small mb-0">已上传升级包查看及管理</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <a href="./history.html" class="card card-link card-link-pop text-decoration-none h-100">
+                            <div class="card-status-start bg-yellow"></div>
+                            <div class="card-body">
+                                <h3 class="card-title text-body">升级历史</h3>
+                                <p class="text-muted small mb-0">查看设备请求升级的历史</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 快速上传 -->
+                <div class="row row-cards mb-4">
+                    <div class="col-12">
+                        <a href="./version.html" class="card card-link card-link-pop text-decoration-none overflow-hidden" style="border-width: 2px; border-color: var(--tblr-primary);">
+                            <div class="card-body d-flex flex-row align-items-center flex-wrap gap-3 py-4">
+                                <div class="rounded-3 bg-primary-lt bg-opacity-10 text-primary p-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="9 11 12 14 20 6"/><path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9"/></svg>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h3 class="card-title mb-1 text-body">快速上传新版本</h3>
+                                    <p class="text-muted mb-0">选择上传配置后上传文件，版本号将按该配置自动自增</p>
+                                </div>
+                                <span class="btn btn-primary">去上传</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 各配置版本展示 -->
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="mb-3">各配置当前版本</h3>
+                        <div class="row row-cards" id="configVersionCards">
+                            <div class="col-12 text-muted py-4" id="configVersionPlaceholder">加载中…</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="./docs.html" class="link-secondary">Documentation</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright © 2026
+                                    <a href="https://github.com/cheenwe" class="link-secondary">cheenwe</a>. All rights reserved.
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="link-secondary" rel="noopener">v1.0.0</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="./js/axios.min.js"></script>
+    <script src="./js/notify.js"></script>
+    <script>
+    (function() {
+        var token = localStorage.getItem("token");
+        var headers = token ? { "Authorization": "Bearer " + token } : {};
+        var actionText = { copy: "仅复制", unzip: "unzip 解压", tar: "tar 解压" };
+        function loadConfigVersions() {
+            var wrap = document.getElementById("configVersionCards");
+            var placeholder = document.getElementById("configVersionPlaceholder");
+            if (!wrap) return;
+            axios.get("/api/upload-configs", { headers: headers })
+                .then(function(r) {
+                    var list = (r.data && r.data.success && r.data.data) ? r.data.data : [];
+                    placeholder.remove();
+                    if (list.length === 0) {
+                        wrap.innerHTML = "<div class=\"col-12 text-muted py-4\">暂无上传配置，请先在 <a href=\"./settings.html\">系统设置</a> 中新增配置。</div>";
+                        return;
+                    }
+                    list.forEach(function(c) {
+                        var name = (c.name || "未命名").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        var ver = (c.current_version || "V1.0").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        var action = actionText[c.action] || c.action || "";
+                        var desc = (c.description || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        var card = document.createElement("div");
+                        card.className = "col-12 col-sm-6 col-lg-4";
+                        card.innerHTML =
+                            "<div class=\"card h-100\">" +
+                            "  <div class=\"card-body\">" +
+                            "    <div class=\"d-flex align-items-center mb-2\">" +
+                            "      <span class=\"avatar avatar-sm bg-primary-lt bg-opacity-10 text-primary me-2\">" + (name.charAt(0) || "?") + "</span>" +
+                            "      <h4 class=\"card-title mb-0\">" + name + "</h4>" +
+                            "    </div>" +
+                            "    <p class=\"text-muted small mb-2\">" + (desc || "—") + "</p>" +
+                            "    <div class=\"mb-3\">" +
+                            "      <span class=\"badge bg-primary-lt bg-opacity-10 text-primary\">当前版本 " + ver + "</span>" +
+                            "      <span class=\"badge bg-azure-lt bg-opacity-10 text-azure ms-1\">" + action + "</span>" +
+                            "    </div>" +
+                            "    <div class=\"d-flex gap-2\">" +
+                            "      <a href=\"./version.html?config_id=" + (c.id || "") + "\" class=\"btn btn-primary btn-sm\">上传该配置</a>" +
+                            "      <a href=\"./versions.html\" class=\"btn btn-outline-secondary btn-sm\">查看版本</a>" +
+                            "    </div>" +
+                            "  </div>" +
+                            "</div>";
+                        wrap.appendChild(card);
+                    });
+                })
+                .catch(function() {
+                    if (placeholder) placeholder.textContent = "加载失败，请刷新重试";
+                });
+        }
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", loadConfigVersions);
+        } else {
+            loadConfigVersions();
+        }
+    })();
+    </script>
+    <script type="text/javascript">
+        //  刷新当前页面
+        function reloadPage() {
+            window.location.reload()
+        }
+
+        //  后退
+        function goBack() {
+            window.history.back()
+        }
+
+        //  前进
+        function goForward() {
+            window.history.forward()
+        }
+
+
+        function ClickLogout() {
+            $.notify("退出系统成功", "success");
+            localStorage.setItem("token", "");
+            localStorage.removeItem("username");
+            localStorage.removeItem("is_admin");
+            window.location.href = "./login.html";
+        }
+    </script>
+</body>
+</html>
